@@ -19,3 +19,6 @@ target_link_libraries(cmsis_blink_203 CMSIS::CH32::V203C8 CH32::Nano CH32::NoSys
 
 ch32_print_size_of_target(cmsis_blink)
 ch32_print_size_of_target(cmsis_blink_203)
+
+ch32_generate_hex_file(cmsis_blink)
+ch32_generate_hex_file(cmsis_blink_203)

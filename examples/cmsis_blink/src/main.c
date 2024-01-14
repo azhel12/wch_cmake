@@ -2,25 +2,33 @@
 
 #if defined (CH32V0)
 	#include "ch32v00x.h"
+
+	#define LED_PORT GPIOD
+    #define LED_PIN 2
+	#define LED_BUS RCC_IOPDEN
 #elif defined (CH32V2)
 	#include "ch32v20x.h"
+
+	#define LED_PORT GPIOA
+    #define LED_PIN 0
+	#define LED_BUS RCC_IOPAEN
 #endif
 
 int main()
 {
-	// Enable GPIOA
-	RCC->APB2PCENR |= RCC_IOPAEN;
+	// Enable GPIOD
+	RCC->APB2PCENR |= LED_BUS;
 	// GPIO D0 Push-Pull
-	GPIOA->CFGLR &= ~(0xf << (4 * 0));
-	GPIOA->CFGLR |= GPIO_CFGLR_MODE0_0 << (4 * 0);
+	LED_PORT->CFGLR &= ~(0xf << (4 * LED_PIN));
+	LED_PORT->CFGLR |= GPIO_CFGLR_MODE0_0 << (4 * LED_PIN);
 
 	while (1)
 	{
-		GPIOA->BSHR = (1 << 0); // Turn on PA0
+		LED_PORT->BSHR = (1 << LED_PIN); // Turn on PA2
 		for (int i = 0; i < 4000000; ++i)
 			__asm("nop");
 
-		GPIOA->BSHR = (1 << (16 + 0)); // Turn off PA0
+		LED_PORT->BSHR = (1 << (16 + LED_PIN)); // Turn off PA2
 		for (int i = 0; i < 4000000; ++i)
 			__asm("nop");
 	}
